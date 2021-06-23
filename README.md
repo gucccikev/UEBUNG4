@@ -2,6 +2,7 @@ https://github.com/gucccikev/UEBUNG4
 
 Worked on project with Alex Babakhel, Marcus Chvatal, Zeljko Sekulic
 
+File error = because of invalid symbols which cannot be converted.
 
 
 # NewsreaderStarterExercise4

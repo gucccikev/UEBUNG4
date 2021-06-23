@@ -36,6 +36,7 @@ public abstract class Downloader {
             }
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("The link contains invalid symbols and cannot be converted.");
         } finally {
             try {
                 Objects.requireNonNull(is).close();
