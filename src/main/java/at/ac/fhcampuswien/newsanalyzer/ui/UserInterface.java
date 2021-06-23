@@ -3,14 +3,20 @@ package at.ac.fhcampuswien.newsanalyzer.ui;
 
 import at.ac.fhcampuswien.newsanalyzer.ctrl.Controller;
 import at.ac.fhcampuswien.newsanalyzer.ctrl.NewsAPIException;
+import at.ac.fhcampuswien.newsanalyzer.downloader.Downloader;
+import at.ac.fhcampuswien.newsanalyzer.downloader.SequentialDownloader;
 import at.ac.fhcampuswien.newsapi.NewsApi;
 import at.ac.fhcampuswien.newsapi.NewsApiBuilder;
+import at.ac.fhcampuswien.newsapi.beans.Article;
 import at.ac.fhcampuswien.newsapi.enums.Country;
 import at.ac.fhcampuswien.newsapi.enums.Endpoint;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Stream;
 
 public class UserInterface {
 
@@ -49,22 +55,67 @@ public class UserInterface {
 		menu.insert("z", "Sort by longest title", this::getSortArticlesByLongestTitle); // Exercise 3
 		menu.insert("g", "Download URLs", () -> {
 			//Todo
+			List<String> urlList = getUrlList();
+			System.out.println("List of downloaded Urls:");
+			for (String ulr : urlList){
+				System.out.println(ulr);
+			}
+		});
+		//
+		menu.insert("l", "Download last search", () -> {
+			//Todo
+			downloadLastSearch();
+
+		});
+		menu.insert("p", "Download last search parallel", () -> {
+			//Todo
+			downloadLastSearchParallel();
+
 		});
 		menu.insert("q", "Quit", null);
 		Runnable choice;
 		while ((choice = menu.exec()) != null) {
-			 choice.run();
+			choice.run();
 		}
 		System.out.println("Program finished");
 	}
+	private void downloadLastSearch(){
+		try{
+			ctrl.downloadLastSearch();
+		} catch (NewsAPIException e) {
+			System.out.println("Something went wrong.");
+		} catch (Exception e){
+			System.out.println(e.getMessage());
+		}
+	}
+	private void downloadLastSearchParallel(){
+		try{
+			ctrl.downloadLastSearchParallel();
+		} catch (NewsAPIException e) {
+			System.out.println("Something went wrong with threads.");
+		} catch (Exception e){
+			System.out.println(e.getMessage());
+		}
+	}
 
+	private List<String> getUrlList(){
+		List<String> result = new ArrayList<>();
+		try{
+			result = ctrl.getUrlList();
+		} catch (NewsAPIException e) {
+			System.out.println("Please load data first!");
+		} catch (Exception e){
+			System.out.println(e.getMessage());
+		}
+		return result;
+	}
 
-    protected String readLine() {
+	protected String readLine() {
 		String value = "\0";
 		BufferedReader inReader = new BufferedReader(new InputStreamReader(System.in));
 		try {
 			value = inReader.readLine();
-        } catch (IOException ignored) {
+		} catch (IOException ignored) {
 
 		}
 		return value.trim();
@@ -72,21 +123,21 @@ public class UserInterface {
 
 	protected Double readDouble(int lowerlimit, int upperlimit) 	{
 		Double number = null;
-        while (number == null) {
+		while (number == null) {
 			String str = this.readLine();
 			try {
 				number = Double.parseDouble(str);
-            } catch (NumberFormatException e) {
-                number = null;
+			} catch (NumberFormatException e) {
+				number = null;
 				System.out.println("Please enter a valid number:");
 				continue;
 			}
-            if (number < lowerlimit) {
+			if (number < lowerlimit) {
 				System.out.println("Please enter a higher number:");
-                number = null;
-            } else if (number > upperlimit) {
+				number = null;
+			} else if (number > upperlimit) {
 				System.out.println("Please enter a lower number:");
-                number = null;
+				number = null;
 			}
 		}
 		return number;

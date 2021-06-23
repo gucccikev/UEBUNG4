@@ -1,3 +1,9 @@
+https://github.com/gucccikev/UEBUNG4
+
+Worked on project with Alex Babakhel, Marcus Chvatal, Zeljko Sekulic
+
+
+
 # NewsreaderStarterExercise4
 
 ## Important!
